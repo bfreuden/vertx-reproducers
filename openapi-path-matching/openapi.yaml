@@ -1,0 +1,285 @@
+openapi: 3.0.0
+info:
+  title: title
+  license:
+    name: MIT
+  version: 1.0.0
+paths:
+  /projects/{projectName}/lexicons/{lexiconName}:
+    get:
+      tags:
+        - lexicons
+      summary: Get a lexicon
+      operationId: getProjectLexicon
+      parameters:
+        - name: projectName
+          in: path
+          description: project name
+          required: true
+          schema:
+            type: string
+        - name: lexiconName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: (to be documented)
+          content:
+            application/json:
+              schema:
+                type: object
+        "404":
+          description: no such element
+        default:
+          description: (to be documented)
+          content:
+            application/json:
+              schema:
+                type: object
+    post:
+      tags:
+        - lexicons
+      summary: Create a new term in the lexicon
+      operationId: createProjectTerm
+      parameters:
+        - name: projectName
+          in: path
+          description: project name
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+        - name: lexiconName
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        description: (to be documented)
+        content:
+          application/json:
+            schema:
+              type: object
+        required: true
+      responses:
+        "200":
+          description: (to be documented)
+          content:
+            application/json:
+              schema:
+                type: object
+    delete:
+      tags:
+        - lexicons
+      summary: Remove lexicon
+      operationId: deleteProjectLexiconByName
+      parameters:
+        - name: projectName
+          in: path
+          description: project name
+          required: true
+          schema:
+            type: string
+        - name: lexiconName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: (to be documented)
+          content:
+            application/json:
+              schema:
+                type: object
+        "404":
+          description: no such element
+    patch:
+      tags:
+        - lexicons
+      summary: Update a lexicon
+      operationId: updateProjectLexicon
+      parameters:
+        - name: projectName
+          in: path
+          description: project name
+          required: true
+          schema:
+            type: string
+        - name: lexiconName
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: (to be documented)
+        content:
+          application/merge-patch+json:
+            schema:
+              type: object
+        required: true
+      responses:
+        "200":
+          description: (to be documented)
+          content:
+            application/json:
+              schema:
+                type: object
+  /projects/{projectName}/lexicons/_search:
+    post:
+      tags:
+        - lexicons
+      summary: Search for terms
+      operationId: searchProjectTerms
+      parameters:
+        - name: projectName
+          in: path
+          description: project name
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+        - name: query
+          in: query
+          description: the text query
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+            default: ""
+      responses:
+        "200":
+          description: (to be documented)
+          content:
+            application/json:
+              schema:
+                type: object
+  /lexicons/{lexiconName}:
+    get:
+      tags:
+        - lexicons
+      summary: Get a lexicon
+      operationId: getLexicon
+      parameters:
+        - name: lexiconName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: (to be documented)
+          content:
+            application/json:
+              schema:
+                type: object
+        "404":
+          description: no such element
+        default:
+          description: (to be documented)
+          content:
+            application/json:
+              schema:
+                type: object
+    post:
+      tags:
+        - lexicons
+      summary: Create a new term in the lexicon
+      operationId: createTerm
+      parameters:
+        - name: lexiconName
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        description: (to be documented)
+        content:
+          application/json:
+            schema:
+              type: object
+        required: true
+      responses:
+        "200":
+          description: (to be documented)
+          content:
+            application/json:
+              schema:
+                type: object
+    delete:
+      tags:
+        - lexicons
+      summary: Remove lexicon
+      operationId: deleteLexiconByName
+      parameters:
+        - name: lexiconName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: (to be documented)
+          content:
+            application/json:
+              schema:
+                type: object
+        "404":
+          description: no such element
+    patch:
+      tags:
+        - lexicons
+      summary: Update a lexicon
+      operationId: updateLexicon
+      parameters:
+        - name: lexiconName
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: (to be documented)
+        content:
+          application/merge-patch+json:
+            schema:
+              type: object
+        required: true
+      responses:
+        "200":
+          description: (to be documented)
+          content:
+            application/json:
+              schema:
+                type: object
+  /lexicons/_search:
+    post:
+      tags:
+        - lexicons
+      summary: Search for terms
+      operationId: searchTerms
+      parameters:
+        - name: query
+          in: query
+          description: the text query
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+            default: ""
+      responses:
+        "200":
+          description: (to be documented)
+          content:
+            application/json:
+              schema:
+                type: object
