@@ -1,6 +1,5 @@
 package org.bfreuden;
 
-import io.vertx.core.impl.ConcurrentHashSet;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.client.WebClientOptions;
 import org.junit.AfterClass;
@@ -30,8 +29,9 @@ public class AppTest {
         HashSet<Integer> only200 = new HashSet<>();
         only200.add(200);
         int concurrency = 64;
-        // authenticate and get cookie
-        WebClient webClient = WebClient.create(App.vertx,
+
+        // authenticate and get the session cookie
+        WebClient webClient = WebClient.create(App.VERTX,
                 new WebClientOptions()
                         .setDefaultHost("localhost")
                         .setDefaultPort(8888)
@@ -47,18 +47,18 @@ public class AppTest {
                 .onSuccess(response -> {
                     cookie = response.getHeader("set-cookie");
                     cookie = cookie.substring(0, cookie.indexOf(";"));
-                    System.out.println(cookie);
-                    System.out.println(response.bodyAsString());
                     statusCodes.add(response.statusCode());
                     countDownLatch.countDown();
                 });
         countDownLatch.await();
+
+        // asserts
         if (err != null)
             throw err;
         assertEquals(only200, statusCodes);
         statusCodes.clear();
 
-        // get protected endpoint: issue a lot of parallel requests
+        // issue a lot of parallel requests to the protected endpoint performing authz operations
         CountDownLatch countDownLatch2 = new CountDownLatch(concurrency);
         for (int i=0 ; i<concurrency ; i++) {
             webClient.get("/protected")
@@ -79,6 +79,7 @@ public class AppTest {
         countDownLatch2.await();
         if (err != null)
             throw err;
+        // we should get only 200 responses, but it is not the case
         if (!only200.equals(statusCodes)) {
             for (String body : bodies) {
                 System.out.println(body.replace("<br>", "\n"));
@@ -89,6 +90,6 @@ public class AppTest {
 
     @AfterClass
     public static void stopServer() {
-        App.vertx.close();
+        App.VERTX.close();
     }
 }
