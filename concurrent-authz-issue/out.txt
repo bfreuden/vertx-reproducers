@@ -1,0 +1,74 @@
+server started in port 8888
+server started in port 8888
+vertx-web.session=2da778408c8c58db0b34d47362ce9dcb
+<h1>public page</h1>
+mars 01, 2022 7:33:20 PM io.vertx.core.impl.ContextImpl
+GRAVE: Unhandled exception
+java.util.ConcurrentModificationException
+	at java.base/java.util.HashMap.computeIfAbsent(HashMap.java:1134)
+	at io.vertx.ext.auth.authorization.impl.AuthorizationsImpl.getOrCreateAuthorizations(AuthorizationsImpl.java:83)
+	at io.vertx.ext.auth.authorization.impl.AuthorizationsImpl.add(AuthorizationsImpl.java:46)
+	at io.vertx.ext.auth.properties.impl.PropertyFileAuthenticationImpl.lambda$getAuthorizations$8(PropertyFileAuthenticationImpl.java:212)
+	at io.vertx.ext.auth.properties.impl.PropertyFileAuthenticationImpl.getUser(PropertyFileAuthenticationImpl.java:161)
+	at io.vertx.ext.auth.properties.impl.PropertyFileAuthenticationImpl.getAuthorizations(PropertyFileAuthenticationImpl.java:203)
+	at org.bfreuden.DelayingAuthorization.lambda$getAuthorizations$0(DelayingAuthorization.java:26)
+	at io.vertx.core.impl.VertxImpl$InternalTimerHandler.handle(VertxImpl.java:893)
+	at io.vertx.core.impl.VertxImpl$InternalTimerHandler.handle(VertxImpl.java:860)
+	at io.vertx.core.impl.EventLoopContext.emit(EventLoopContext.java:50)
+	at io.vertx.core.impl.DuplicatedContext.emit(DuplicatedContext.java:168)
+	at io.vertx.core.impl.AbstractContext.emit(AbstractContext.java:53)
+	at io.vertx.core.impl.VertxImpl$InternalTimerHandler.run(VertxImpl.java:883)
+	at io.netty.util.concurrent.PromiseTask.runTask(PromiseTask.java:98)
+	at io.netty.util.concurrent.ScheduledFutureTask.run(ScheduledFutureTask.java:170)
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:164)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:469)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:503)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:986)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+
+
+server started in port 8888
+vertx-web.session=491ed8c37a51f4442b71c195e8712aa4
+<h1>public page</h1>
+<h1>protected page</h1>
+<h1>java.util.ConcurrentModificationException
+	at java.base/java.util.HashMap$HashIterator.nextNode(HashMap.java:1493)
+	at java.base/java.util.HashMap$KeyIterator.next(HashMap.java:1516)
+	at io.vertx.ext.auth.authorization.impl.PermissionBasedAuthorizationImpl.match(PermissionBasedAuthorizationImpl.java:60)
+	at io.vertx.ext.auth.authorization.Authorization.match(Authorization.java:67)
+	at org.bfreuden.WebServer.lambda$protectedPageHandler$3(WebServer.java:84)
+	at io.vertx.core.impl.future.FutureImpl$3.onSuccess(FutureImpl.java:141)
+	at io.vertx.core.impl.future.FutureBase.emitSuccess(FutureBase.java:60)
+	at io.vertx.core.impl.future.FutureImpl.tryComplete(FutureImpl.java:211)
+	at io.vertx.core.impl.future.PromiseImpl.tryComplete(PromiseImpl.java:23)
+	at io.vertx.core.Promise.tryComplete(Promise.java:121)
+	at io.vertx.core.Promise.complete(Promise.java:77)
+	at org.bfreuden.WebServer.lambda$protectedPageHandler$1(WebServer.java:69)
+	at io.vertx.core.impl.future.FutureImpl$1.onSuccess(FutureImpl.java:91)
+	at io.vertx.core.impl.future.FutureImpl$ListenerArray.onSuccess(FutureImpl.java:262)
+	at io.vertx.core.impl.future.FutureBase.emitSuccess(FutureBase.java:60)
+	at io.vertx.core.impl.future.FutureImpl.tryComplete(FutureImpl.java:211)
+	at io.vertx.core.impl.future.PromiseImpl.tryComplete(PromiseImpl.java:23)
+	at io.vertx.core.impl.future.PromiseImpl.onSuccess(PromiseImpl.java:49)
+	at io.vertx.core.impl.future.PromiseImpl.handle(PromiseImpl.java:41)
+	at io.vertx.core.impl.future.PromiseImpl.handle(PromiseImpl.java:23)
+	at io.vertx.ext.auth.properties.impl.PropertyFileAuthenticationImpl.lambda$getAuthorizations$8(PropertyFileAuthenticationImpl.java:213)
+	at io.vertx.ext.auth.properties.impl.PropertyFileAuthenticationImpl.lambda$getUser$6(PropertyFileAuthenticationImpl.java:157)
+	at io.vertx.ext.auth.properties.impl.PropertyFileAuthenticationImpl.lambda$readFile$5(PropertyFileAuthenticationImpl.java:148)
+	at io.vertx.core.impl.future.FutureImpl$3.onSuccess(FutureImpl.java:141)
+	at io.vertx.core.impl.future.FutureBase.lambda$emitSuccess$0(FutureBase.java:54)
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:164)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:469)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:500)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:986)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+</h1>
+
+java.lang.AssertionError:
+Expected :[200]
+Actual   :[500, 200]
+<Click to see difference>
