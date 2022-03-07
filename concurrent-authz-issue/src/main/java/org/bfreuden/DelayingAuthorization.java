@@ -1,6 +1,7 @@
 package org.bfreuden;
 
 import io.vertx.core.AsyncResult;
+import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.ext.auth.User;
@@ -25,7 +26,14 @@ public class DelayingAuthorization implements AuthorizationProvider {
 
     @Override
     public void getAuthorizations(User user, Handler<AsyncResult<Void>> handler) {
-        vertx.setTimer(15L + Math.round(5L * Math.random()), h -> provider.getAuthorizations(user, handler));
+        vertx.setTimer(15L + Math.round(5L * Math.random()), h -> {
+            try {
+                provider.getAuthorizations(user, handler);
+            } catch (Throwable t) {
+                // yes, it happens sometimes (see out.txt stack traces)
+                handler.handle(Future.failedFuture(t));
+            }
+        });
     }
 
 }

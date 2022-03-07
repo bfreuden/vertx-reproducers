@@ -28,6 +28,7 @@ java.util.ConcurrentModificationException
 	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
 	at java.base/java.lang.Thread.run(Thread.java:829)
 
+----------------------------------------------------------------------------------------------
 
 server started in port 8888
 vertx-web.session=491ed8c37a51f4442b71c195e8712aa4
@@ -72,3 +73,125 @@ java.lang.AssertionError:
 Expected :[200]
 Actual   :[500, 200]
 <Click to see difference>
+
+-------------------------------------------------------------------------------
+
+java.util.ConcurrentModificationException
+	at java.base/java.util.HashMap.computeIfAbsent(HashMap.java:1134)
+	at io.vertx.ext.auth.authorization.impl.AuthorizationsImpl.getOrCreateAuthorizations(AuthorizationsImpl.java:83)
+	at io.vertx.ext.auth.authorization.impl.AuthorizationsImpl.add(AuthorizationsImpl.java:46)
+	at io.vertx.ext.auth.properties.impl.PropertyFileAuthenticationImpl.lambda$getAuthorizations$8(PropertyFileAuthenticationImpl.java:212)
+	at io.vertx.ext.auth.properties.impl.PropertyFileAuthenticationImpl.getUser(PropertyFileAuthenticationImpl.java:161)
+	at io.vertx.ext.auth.properties.impl.PropertyFileAuthenticationImpl.getAuthorizations(PropertyFileAuthenticationImpl.java:203)
+	at org.bfreuden.DelayingAuthorization.lambda$getAuthorizations$0(DelayingAuthorization.java:28)
+	at io.vertx.core.impl.VertxImpl$InternalTimerHandler.handle(VertxImpl.java:893)
+	at io.vertx.core.impl.VertxImpl$InternalTimerHandler.handle(VertxImpl.java:860)
+	at io.vertx.core.impl.EventLoopContext.emit(EventLoopContext.java:50)
+	at io.vertx.core.impl.DuplicatedContext.emit(DuplicatedContext.java:168)
+	at io.vertx.core.impl.AbstractContext.emit(AbstractContext.java:53)
+	at io.vertx.core.impl.VertxImpl$InternalTimerHandler.run(VertxImpl.java:883)
+	at io.netty.util.concurrent.PromiseTask.runTask(PromiseTask.java:98)
+	at io.netty.util.concurrent.ScheduledFutureTask.run(ScheduledFutureTask.java:170)
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:164)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:469)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:503)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:986)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+
+--------------------------------------------------
+
+java.lang.AssertionError:
+Expected :[200]
+Actual   :[403, 200]
+
+
+-------------------------------------------------------
+
+
+<h1>java.util.ConcurrentModificationException
+	at java.base/java.util.HashMap$HashIterator.nextNode(HashMap.java:1493)
+	at java.base/java.util.HashMap$KeyIterator.next(HashMap.java:1516)
+	at java.base/java.util.AbstractSet.hashCode(AbstractSet.java:122)
+	at java.base/java.util.Objects.hashCode(Objects.java:116)
+	at java.base/java.util.HashMap$Node.hashCode(HashMap.java:297)
+	at java.base/java.util.AbstractMap.hashCode(AbstractMap.java:527)
+	at io.vertx.ext.auth.authorization.impl.AuthorizationsImpl.hashCode(AuthorizationsImpl.java:95)
+	at java.base/java.util.Arrays.hashCode(Arrays.java:4685)
+	at java.base/java.util.Objects.hash(Objects.java:146)
+	at io.vertx.ext.auth.impl.UserImpl.hashCode(UserImpl.java:87)
+	at java.base/java.util.HashMap.hash(HashMap.java:339)
+	at java.base/java.util.HashMap.put(HashMap.java:607)
+	at java.base/java.util.HashSet.add(HashSet.java:220)
+	at java.base/java.util.Collections$SynchronizedCollection.add(Collections.java:2040)
+	at org.bfreuden.WebServer.protectedPageHandler(WebServer.java:97)
+	at io.vertx.ext.web.impl.RouteState.handleContext(RouteState.java:1212)
+	at io.vertx.ext.web.impl.RoutingContextImplBase.iterateNext(RoutingContextImplBase.java:163)
+	at io.vertx.ext.web.impl.RoutingContextImpl.next(RoutingContextImpl.java:141)
+	at io.vertx.ext.web.handler.impl.AuthenticationHandlerInternal.postAuthentication(AuthenticationHandlerInternal.java:44)
+	at io.vertx.ext.web.handler.impl.AuthenticationHandlerImpl.handle(AuthenticationHandlerImpl.java:68)
+	at io.vertx.ext.web.handler.impl.AuthenticationHandlerImpl.handle(AuthenticationHandlerImpl.java:31)
+	at io.vertx.ext.web.impl.RouteState.handleContext(RouteState.java:1212)
+	at io.vertx.ext.web.impl.RoutingContextImplBase.iterateNext(RoutingContextImplBase.java:163)
+	at io.vertx.ext.web.impl.RoutingContextImpl.next(RoutingContextImpl.java:141)
+	at io.vertx.ext.web.handler.impl.SessionHandlerImpl.lambda$handle$6(SessionHandlerImpl.java:344)
+	at io.vertx.ext.web.handler.impl.SessionHandlerImpl.lambda$doGetSession$9(SessionHandlerImpl.java:440)
+	at io.vertx.ext.web.sstore.impl.LocalSessionStoreImpl.get(LocalSessionStoreImpl.java:88)
+	at io.vertx.ext.web.handler.impl.SessionHandlerImpl.doGetSession(SessionHandlerImpl.java:425)
+	at io.vertx.ext.web.handler.impl.SessionHandlerImpl.getSession(SessionHandlerImpl.java:421)
+	at io.vertx.ext.web.handler.impl.SessionHandlerImpl.handle(SessionHandlerImpl.java:313)
+	at io.vertx.ext.web.handler.impl.SessionHandlerImpl.handle(SessionHandlerImpl.java:40)
+	at io.vertx.ext.web.impl.RouteState.handleContext(RouteState.java:1212)
+	at io.vertx.ext.web.impl.RoutingContextImplBase.iterateNext(RoutingContextImplBase.java:163)
+	at io.vertx.ext.web.impl.RoutingContextImpl.next(RoutingContextImpl.java:141)
+	at io.vertx.ext.web.impl.RouterImpl.handle(RouterImpl.java:67)
+	at io.vertx.ext.web.impl.RouterImpl.handle(RouterImpl.java:37)
+	at io.vertx.core.http.impl.Http1xServerRequestHandler.handle(Http1xServerRequestHandler.java:67)
+	at io.vertx.core.http.impl.Http1xServerRequestHandler.handle(Http1xServerRequestHandler.java:30)
+	at io.vertx.core.impl.EventLoopContext.emit(EventLoopContext.java:50)
+	at io.vertx.core.impl.DuplicatedContext.emit(DuplicatedContext.java:168)
+	at io.vertx.core.http.impl.Http1xServerConnection.handleMessage(Http1xServerConnection.java:145)
+	at io.vertx.core.net.impl.ConnectionBase.read(ConnectionBase.java:156)
+	at io.vertx.core.net.impl.VertxHandler.channelRead(VertxHandler.java:153)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:357)
+	at io.netty.channel.ChannelInboundHandlerAdapter.channelRead(ChannelInboundHandlerAdapter.java:93)
+	at io.netty.handler.codec.http.websocketx.extensions.WebSocketServerExtensionHandler.channelRead(WebSocketServerExtensionHandler.java:99)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:357)
+	at io.vertx.core.http.impl.Http1xUpgradeToH2CHandler.channelRead(Http1xUpgradeToH2CHandler.java:116)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:357)
+	at io.netty.handler.codec.ByteToMessageDecoder.fireChannelRead(ByteToMessageDecoder.java:327)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:299)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:357)
+	at io.vertx.core.http.impl.Http1xOrH2CHandler.end(Http1xOrH2CHandler.java:61)
+	at io.vertx.core.http.impl.Http1xOrH2CHandler.channelRead(Http1xOrH2CHandler.java:38)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:357)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1410)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:919)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:166)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:722)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:658)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:584)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:496)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:986)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+</h1>
+<h1>not authorized</h1>
+
+java.lang.AssertionError:
+Expected :[200]
+Actual   :[403, 500, 200]

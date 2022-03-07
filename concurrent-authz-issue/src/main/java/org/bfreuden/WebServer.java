@@ -70,7 +70,9 @@ public class WebServer extends AbstractVerticle {
     }
 
     private void protectedPageHandler(RoutingContext routingContext) {
-        // try to make sure all parallel requests will run almost at the same time
+        // try to make sure all parallel requests will run almost at the same time.
+        // if you comment it out, you are less likely to get 500 errors (due to ConcurrentModificationException)
+        // but you will still get 403 errors quite frequently (user having no permissions when he should have).
         vertx.setTimer(System.currentTimeMillis() - loginTime + 1000, h -> {
             User user = routingContext.user();
             Promise<Void> authorizationReady = Promise.promise();
