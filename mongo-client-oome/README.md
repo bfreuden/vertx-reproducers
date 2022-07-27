@@ -41,8 +41,9 @@ as soon as incorrect documents appear, there will be some asynchronous bulk upda
 
 The reproducer:
 1. uses AspectJ to trace `io.vertx.ext.mongo.impl.PublisherAdapter#handleIn` and `io.vertx.ext.mongo.impl.PublisherAdapter#requestMore` method calls
-3. uses java.lang.reflect tricks to trace capacity changes of the underlying `io.vertx.core.streams.impl.InboundBuffer` of the `io.vertx.ext.mongo.impl.PublisherAdapter`
-2. uses AspectJ to detect if a `drain()` occurs in the `InboundBuffer` of the `PublisherAdapter`
+2. uses java.lang.reflect tricks to trace capacity changes of the underlying `io.vertx.core.streams.impl.InboundBuffer` of the `io.vertx.ext.mongo.impl.PublisherAdapter`
+3. uses AspectJ to detect if a `drain()` occurs in the `InboundBuffer` of the `PublisherAdapter`
+4. uses AspectJ to detect if `pause()` or `resume()` occur in the `PublisherAdapter`
 
 
 # What is observed
