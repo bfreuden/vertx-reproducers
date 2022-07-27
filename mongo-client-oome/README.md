@@ -237,9 +237,12 @@ As soon as the processing loop starts to perform asynchronous operations:
 I have the impression the issue is related to the `inFlight` field of `PublisherAdapter`.
 It should somehow keep track of the `requestMore` calls and be aware of `batchSize`.
 
+I tried to do so, it seems to be working, but as I don't understand the subtilities of ReadStream, Publisher, InboundQueue etc... 
+my modification might be crappy.
+
 # My understanding of Kotlin-specific additions
 
-Kotlin adds the `toReceiveChannel` in the picture. 
+Kotlin adds the `toReceiveChannel` in the picture (compared to pure Java code). 
 
 If I understand correctly, that channel will issue the following sequence of calls on the stream:
 1. pause()
