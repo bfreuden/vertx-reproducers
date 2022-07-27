@@ -14,13 +14,17 @@ for (doc in docs) {
 }
 ```
 
+Note that 512 element do fit into memory without any problem.
+
 # How to reproduce
 
 My setup:
 1. OpenJDK 11
 2. Maven 3.8.1
 
-MAVEN_OPTS=-Xmx128m mvn clean package exec:java 
+```python
+MAVEN_OPTS=-Xmx128m mvn clean package exec:java
+```
 
 Note: running the program in IntelliJ seems to be problematic because of AspectJ (?), so remove it from the pom if you want to to so.
 
