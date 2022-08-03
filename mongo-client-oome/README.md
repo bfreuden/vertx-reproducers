@@ -18,11 +18,22 @@ Note that 512 element do fit into memory without any problem.
 
 # How to reproduce
 
+
 My setup:
 1. OpenJDK 11
 2. Maven 3.8.1
 
-```python
+
+Build + install the AspectJ Maven plugin (not available on maven central?):
+```
+git clone https://github.com/mojohaus/aspectj-maven-plugin.git
+cd aspectj-maven-plugin
+git checkout aspectj-maven-plugin-1.14.0
+mvn clean install -DskipTests
+```
+
+Build and run the reproducer:
+```
 MAVEN_OPTS=-Xmx128m mvn clean package exec:java
 ```
 
