@@ -17,20 +17,27 @@
   </properties>
 
   <dependencies>
+    <!-- https://mvnrepository.com/artifact/com.ibm.async/asyncutil -->
+    <dependency>
+      <groupId>com.ibm.async</groupId>
+      <artifactId>asyncutil</artifactId>
+      <version>0.1.0</version>
+    </dependency>
+
     <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-web</artifactId>
-      <version>4.2.5</version>
+      <version>4.4.0</version>
     </dependency>
     <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-web-client</artifactId>
-      <version>4.2.5</version>
+      <version>4.4.0</version>
     </dependency>
     <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-auth-properties</artifactId>
-      <version>4.2.5</version>
+      <version>4.4.0</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>

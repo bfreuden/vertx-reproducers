@@ -1,6 +1,8 @@
 package org.bfreuden;
 
+import com.ibm.asyncutil.locks.AsyncLock;
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.ext.auth.User;
 import io.vertx.ext.auth.authorization.Authorization;
@@ -43,7 +45,7 @@ public class WebServer extends AbstractVerticle {
             // add session handler to all routes
             router.route().handler(sessionHandler);
             // add basic auth to all routes
-            router.route().handler(BasicAuthHandler.create(auth));
+            router.route().handler(BasicAuthHandler.create(new UserWithLockAuthenticationProvider(auth)));
             // route not performing any authz check
             router.get("/public").handler(this::publicPageHandler);
             // route performing authz checks that will be hammered by the test program
@@ -83,25 +85,38 @@ public class WebServer extends AbstractVerticle {
                 // the test is running fine if you comment it.
                 // since all vertx authorization providers are cumulative (they are adding permissions to the set),
                 // if your application needs to remove permission, then you need to clear authorizations before
-                if (!user.authorizations().getProviderIds().isEmpty()) {
-                    user.authorizations().clear();
-                }
-                // get authorizations only if they are empty (that's what a real program should do?)
-                if (user.authorizations().getProviderIds().isEmpty()) {
-                    authz.getAuthorizations(user)
-                            .onSuccess(v-> {
-                                // the OK scenario
-                                authorizationReady.complete();
-                            })
-                            .onFailure(t-> {
-                                // does not happen AFAIK
-                                replyError(routingContext, t);
-                            })
-                    ;
-                } else {
-                    // just in case you want to comment user.authorizations().clear();
-                    authorizationReady.complete();
-                }
+
+                AsyncLock lock = (AsyncLock)user.attributes().getValue(UserWithLockAuthenticationProvider.LOCK_ATT_NAME);
+                Future<AsyncLock.LockToken> userLockAcquired = Future.fromCompletionStage(lock.acquireLock());
+                userLockAcquired.onComplete(ar -> {
+                    if (ar.failed()) {
+                        replyError(routingContext, ar.cause());
+                    } else {
+                        AsyncLock.LockToken lockToken = ar.result();
+                        if (!user.authorizations().getProviderIds().isEmpty()) {
+                            user.authorizations().clear();
+                        }
+                        // get authorizations only if they are empty (that's what a real program should do?)
+                        if (user.authorizations().getProviderIds().isEmpty()) {
+                            authz.getAuthorizations(user)
+                                    .onSuccess(v-> {
+                                        lockToken.releaseLock();
+                                        // the OK scenario
+                                        authorizationReady.complete();
+                                    })
+                                    .onFailure(t-> {
+                                        lockToken.releaseLock();
+                                        // does not happen AFAIK
+                                        replyError(routingContext, t);
+                                    })
+                            ;
+                        } else {
+                            // just in case you want to comment user.authorizations().clear();
+                            authorizationReady.complete();
+                        }
+                    }
+
+                });
 
             } catch (Throwable t) {
                 // yes, it happens sometimes (see out.txt stack traces)
@@ -110,21 +125,31 @@ public class WebServer extends AbstractVerticle {
             // once authorizations are ready, use them
             authorizationReady.future().onComplete(v -> {
                 try {
-                    // try to match a permission: this can throw an error sometimes (see out.txt stack traces)
-                    if (PermissionBasedAuthorization.create("do:stuff").match(user)) {
-                        Authorizations authorizations = user.authorizations();
-                        // this iteration is also likely to raise ConcurrentModificationException on authorizations
-                        for (String providerId : authorizations.getProviderIds()) {
-                            Set<Authorization> authorizationSet = authorizations.get(providerId);
-                            StringBuilder builder = new StringBuilder();
-                            for (Authorization authorization : authorizationSet) {
-                                builder.append(authorization.toString());
+                    AsyncLock lock = (AsyncLock)user.attributes().getValue(UserWithLockAuthenticationProvider.LOCK_ATT_NAME);
+                    Future<AsyncLock.LockToken> userLockAcquired = Future.fromCompletionStage(lock.acquireLock());
+                    userLockAcquired.onComplete(ar -> {
+                        if (ar.failed()) {
+                            replyError(routingContext, ar.cause());
+                        } else {
+                            try (AsyncLock.LockToken lockToken = ar.result()) {
+                                // try to match a permission: this can throw an error sometimes (see out.txt stack traces)
+                                if (PermissionBasedAuthorization.create("do:stuff").match(user)) {
+                                    Authorizations authorizations = user.authorizations();
+                                    // this iteration is also likely to raise ConcurrentModificationException on authorizations
+                                    for (String providerId : authorizations.getProviderIds()) {
+                                        Set<Authorization> authorizationSet = authorizations.get(providerId);
+                                        StringBuilder builder = new StringBuilder();
+                                        for (Authorization authorization : authorizationSet) {
+                                            builder.append(authorization.toString());
+                                        }
+                                    }
+                                    replySuccess(routingContext, "<h1>protected page</h1>");
+                                } else {
+                                    replyNotAuthorized(routingContext, "<h1>not authorized</h1>");
+                                }
                             }
                         }
-                        replySuccess(routingContext, "<h1>protected page</h1>");
-                    } else {
-                        replyNotAuthorized(routingContext, "<h1>not authorized</h1>");
-                    }
+                    });
                 } catch (Throwable t) {
                     // yes, it happens sometimes (see out.txt stack traces)
                     replyError(routingContext, t);
