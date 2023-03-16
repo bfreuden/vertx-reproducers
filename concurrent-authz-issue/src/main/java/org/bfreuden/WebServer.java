@@ -19,6 +19,9 @@ import io.vertx.ext.web.sstore.LocalSessionStore;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.util.Set;
 
 
@@ -30,10 +33,24 @@ import java.util.Set;
 //    - /protected that is performing some authz operations
 public class WebServer extends AbstractVerticle {
 
+    public class DynamicInvocationHandler implements InvocationHandler {
+
+        @Override
+        public Object invoke(Object proxy, Method method, Object[] args) {
+            return null;
+        }
+    }
+
+    AsyncLock.LockToken nopLock = (AsyncLock.LockToken) Proxy.newProxyInstance(
+            WebServer.class.getClassLoader(),
+            new Class[] { AsyncLock.LockToken.class },
+            new DynamicInvocationHandler());
+
     private AuthorizationProvider authz;
     private static long loginTime;
 
     public void start(Promise<Void> startPromise) {
+        Boolean useAsyncLock = config().getBoolean("useAsyncLock");
         try {
             Router router = Router.router(vertx);
             // one session store per web server thread (is it ok?)
@@ -45,7 +62,10 @@ public class WebServer extends AbstractVerticle {
             // add session handler to all routes
             router.route().handler(sessionHandler);
             // add basic auth to all routes
-            router.route().handler(BasicAuthHandler.create(new UserWithLockAuthenticationProvider(auth)));
+            router.route().handler(BasicAuthHandler.create(
+                    useAsyncLock != null && useAsyncLock ?
+                    new UserWithLockAuthenticationProvider(auth) : auth
+            ));
             // route not performing any authz check
             router.get("/public").handler(this::publicPageHandler);
             // route performing authz checks that will be hammered by the test program
@@ -87,7 +107,12 @@ public class WebServer extends AbstractVerticle {
                 // if your application needs to remove permission, then you need to clear authorizations before
 
                 AsyncLock lock = (AsyncLock)user.attributes().getValue(UserWithLockAuthenticationProvider.LOCK_ATT_NAME);
-                Future<AsyncLock.LockToken> userLockAcquired = Future.fromCompletionStage(lock.acquireLock());
+                Future<AsyncLock.LockToken> userLockAcquired;
+                if (lock == null) {
+                    userLockAcquired = Future.succeededFuture(nopLock);
+                } else {
+                    userLockAcquired = Future.fromCompletionStage(lock.acquireLock());
+                }
                 userLockAcquired.onComplete(ar -> {
                     if (ar.failed()) {
                         replyError(routingContext, ar.cause());
@@ -126,7 +151,12 @@ public class WebServer extends AbstractVerticle {
             authorizationReady.future().onComplete(v -> {
                 try {
                     AsyncLock lock = (AsyncLock)user.attributes().getValue(UserWithLockAuthenticationProvider.LOCK_ATT_NAME);
-                    Future<AsyncLock.LockToken> userLockAcquired = Future.fromCompletionStage(lock.acquireLock());
+                    Future<AsyncLock.LockToken> userLockAcquired;
+                    if (lock == null) {
+                        userLockAcquired = Future.succeededFuture(nopLock);
+                    } else {
+                        userLockAcquired = Future.fromCompletionStage(lock.acquireLock());
+                    }
                     userLockAcquired.onComplete(ar -> {
                         if (ar.failed()) {
                             replyError(routingContext, ar.cause());

@@ -16,6 +16,8 @@ public class AppTest {
     @BeforeClass
     public static void startServer() throws InterruptedException {
         App.main(new String[0]);
+//        App.main(new String[] {"useAsyncLock"});
+
     }
 
     Throwable err;
